@@ -18,6 +18,18 @@
   cursor: pointer;
 }
 
+.auth__link {
+  cursor: pointer;
+  font-size: 14px;
+  color: #1976d2;
+  text-decoration: underline;
+  text-decoration-color: #1976d288;
+  transition: all linear 0.1s;
+}
+.auth__link:hover {
+  text-decoration-color: #1976d2;
+}
+
 /* ==================================================================
                             Registration page end
 =================================================================== */
