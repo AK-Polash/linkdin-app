@@ -11,12 +11,22 @@ import {
   Alert,
   styled,
 } from "@mui/material/";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Image from "../components/Image";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
 
 const theme = createTheme();
 
 const Registration = () => {
+  let auth = getAuth();
+  let navigate = useNavigate();
+
   let [formData, setFormData] = useState({
     email: "",
     fullName: "",
@@ -63,12 +73,40 @@ const Registration = () => {
       setErrorMsg({ ...errorMsg, password: "Minimum 8 Char Required" });
     } else {
       setErrorMsg({ ...errorMsg, email: "", fullName: "", password: "" });
-      setFormData({
-        ...formData,
-        email: "",
-        fullName: "",
-        password: "",
-      });
+
+      createUserWithEmailAndPassword(
+        auth,
+        data.get("email"),
+        data.get("password")
+      )
+        .then((userCredential) => {
+          updateProfile(auth.currentUser, {
+            displayName: data.get("fullName"),
+          })
+            .then(() => {
+              setFormData({
+                ...formData,
+                email: "",
+                fullName: "",
+                password: "",
+              });
+
+              navigate("/login");
+            })
+            .catch((error) => {
+              console.log(error.code);
+            });
+
+          const user = userCredential.user;
+          console.log(user);
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          console.log(errorCode);
+          if (errorCode.includes("auth/email-already-in-use")) {
+            setErrorMsg({ ...errorMsg, email: "Email already in use" });
+          }
+        });
 
       // setFormData({
       //   ...formData,
@@ -77,9 +115,10 @@ const Registration = () => {
       //   password: data.get("password"),
       // });
       console.log("kaj hoise");
-      console.log(formData);
     }
   };
+
+  let [show, setShow] = useState(false);
 
   return (
     <ThemeProvider theme={theme}>
@@ -95,7 +134,7 @@ const Registration = () => {
           }}
         >
           <div className="logo__holder">
-            <svg
+            {/* <svg
               className="signup__logo"
               viewBox="0 0 46 46"
               fill="none"
@@ -120,7 +159,12 @@ const Registration = () => {
                   <stop offset="1" stop-color="#0E6795" />
                 </linearGradient>
               </defs>
-            </svg>
+            </svg> */}
+            <Image
+              className="signup__logo"
+              imageSource="./assets/Logo.png"
+              alt="Logo Img"
+            />
           </div>
           <Typography component="h1" variant="h5" color="#11175D">
             Get started with easily register
@@ -159,6 +203,7 @@ const Registration = () => {
                       position: "absolute",
                       bottom: "-37.8px",
                       left: "16px",
+                      fontSize: "14px",
                     }}
                     variant="filled"
                     severity="error"
@@ -203,7 +248,7 @@ const Registration = () => {
                   fullWidth
                   name="password"
                   label="Password"
-                  type="password"
+                  type={show ? "text" : "password"}
                   autoComplete="new-password"
                   autoFocus={errorMsg.password ? true : false}
                   onChange={(e) => {
@@ -212,6 +257,19 @@ const Registration = () => {
                   }}
                   value={formData.password}
                 />
+
+                {show ? (
+                  <BsFillEyeFill
+                    onClick={() => setShow(!show)}
+                    className="eyeIcon"
+                  />
+                ) : (
+                  <BsFillEyeSlashFill
+                    onClick={() => setShow(!show)}
+                    className="eyeIcon"
+                  />
+                )}
+
                 {errorMsg.password && (
                   <Alert
                     sx={{
