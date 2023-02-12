@@ -11,6 +11,7 @@ import Login from "./pages/Login";
 import NoMatch from "./components/NoMatch";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
+import RootLayout from "./components/RootLayout";
 
 function App() {
   let router = createBrowserRouter(
@@ -19,7 +20,7 @@ function App() {
         <Route path="signup" element={<Registration />} />
         <Route path="login" element={<Login />} />
         <Route path="*" element={<NoMatch />} />
-        <Route path="/">
+        <Route path="/" element={<RootLayout />}>
           <Route index element={<Home />} />
           <Route path="profile" element={<Profile />} />
         </Route>

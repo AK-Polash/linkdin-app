@@ -16,20 +16,20 @@ const Home = () => {
     }
   }, []);
 
-  let handleLogOut = () => {
-    signOut(auth)
-      .then(() => {
-        dispatch(activeUser(null));
-        localStorage.removeItem("userInfo");
+  // let handleLogOut = () => {
+  //   signOut(auth)
+  //     .then(() => {
+  //       dispatch(activeUser(null));
+  //       localStorage.removeItem("userInfo");
 
-        setTimeout(() => {
-          navigate("/login");
-        }, 500);
-      })
-      .catch((error) => {
-        console.log(error.code);
-      });
-  };
+  //       setTimeout(() => {
+  //         navigate("/login");
+  //       }, 500);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error.code);
+  //     });
+  // };
 
   return (
     <div
@@ -43,7 +43,7 @@ const Home = () => {
     >
       <h1 style={{ color: "red" }}>Home Page</h1>
 
-      <button onClick={handleLogOut}>Log Out</button>
+      {/* <button onClick={handleLogOut}>Log Out</button> */}
     </div>
   );
 };
