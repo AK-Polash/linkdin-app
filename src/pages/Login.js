@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import {
   Button,
   CssBaseline,
@@ -12,16 +13,19 @@ import {
   Backdrop,
   Fade,
 } from "@mui/material/";
-
-import Image from "../components/Image";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Image from "../components/Image";
 import {
   getAuth,
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
-import { useNavigate, Link } from "react-router-dom";
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
+import { useDispatch } from "react-redux";
+import { activeUser } from "../slices/userSlice";
+import { ColorRing } from "react-loader-spinner";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const theme = createTheme();
 
@@ -39,8 +43,10 @@ const style = {
 
 const Login = () => {
   let auth = getAuth();
+  let dispatch = useDispatch();
   let navigate = useNavigate();
   let [show, setShow] = useState(false);
+  let [loader, setLoader] = useState(false);
 
   // Modal:
   const [open, setOpen] = useState(false);
@@ -73,11 +79,11 @@ const Login = () => {
       setErrorMsg({ ...errorMsg, password: "Enter password" });
     } else {
       setErrorMsg({ ...errorMsg, email: "", password: "" });
+      setLoader(true);
 
       signInWithEmailAndPassword(auth, formData.email, formData.password)
         .then((userCredential) => {
-          const user = userCredential.user;
-          console.log(user);
+          dispatch(activeUser(userCredential.user));
 
           setFormData({
             ...formData,
@@ -85,18 +91,34 @@ const Login = () => {
             password: "",
           });
 
-          // navigate("")
-          console.log("Login hoise");
+          toast.success("🦄 Login Successful!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+
+          setTimeout(() => {
+            setLoader(false);
+            navigate("/profile");
+          }, 1000);
         })
         .catch((error) => {
           const errorCode = error.code;
 
           if (errorCode.includes("auth/user-not-found")) {
             setErrorMsg({ ...errorMsg, email: "User not found" });
+            setLoader(false);
           } else if (errorCode.includes("auth/wrong-password")) {
             setErrorMsg({ ...errorMsg, password: "Wrong password" });
+            setLoader(false);
           } else if (errorCode.includes("auth/network-request-failed")) {
             setErrorMsg({ ...errorMsg, password: "Network Error" });
+            setLoader(false);
           }
         });
     }
@@ -140,6 +162,18 @@ const Login = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -176,6 +210,7 @@ const Login = () => {
                 <TextField
                   required
                   fullWidth
+                  disabled={loader ? true : false}
                   label="Email Address"
                   name="email"
                   autoComplete="email"
@@ -211,6 +246,7 @@ const Login = () => {
                   // helperText={errorMsg.password ? errorMsg.password : ""}
                   required
                   fullWidth
+                  disabled={loader ? true : false}
                   name="password"
                   label="Password"
                   type={show ? "text" : "password"}
@@ -252,16 +288,36 @@ const Login = () => {
                 )}
               </Grid>
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 5, mb: 2, padding: "11px 0", borderRadius: "40px" }}
-            >
-              Sign In
-            </Button>
 
-            <Grid container>
+            {loader ? (
+              <ColorRing
+                visible={true}
+                height="80"
+                width="80"
+                ariaLabel="blocks-loading"
+                wrapperStyle={{
+                  display: "block",
+                  margin: "0 auto ",
+                  marginTop: "40px",
+                  marginBottom: "16px",
+                  width: "46.49px",
+                  height: "46.49px",
+                }}
+                wrapperClass="blocks-wrapper"
+                colors={["#b8c480", "#B2A3B5", "#F4442E", "#51E5FF", "#429EA6"]}
+              />
+            ) : (
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 5, mb: 2, padding: "11px 0", borderRadius: "40px" }}
+              >
+                Sign In
+              </Button>
+            )}
+
+            <Grid container sx={{ visibility: loader ? "hidden" : "visible" }}>
               <Grid item xs>
                 <span onClick={handleOpen} className="auth__link">
                   Forgot password?

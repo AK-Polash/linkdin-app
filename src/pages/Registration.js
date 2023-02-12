@@ -16,15 +16,21 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   updateProfile,
+  sendEmailVerification,
 } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
+import { ColorRing } from "react-loader-spinner";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const theme = createTheme();
 
 const Registration = () => {
   let auth = getAuth();
   let navigate = useNavigate();
   let [show, setShow] = useState(false);
+  let [loader, setLoader] = useState(false);
 
   let [formData, setFormData] = useState({
     email: "",
@@ -72,6 +78,7 @@ const Registration = () => {
       setErrorMsg({ ...errorMsg, password: "Minimum 8 Char Required" });
     } else {
       setErrorMsg({ ...errorMsg, email: "", fullName: "", password: "" });
+      setLoader(true);
 
       createUserWithEmailAndPassword(
         auth,
@@ -79,46 +86,78 @@ const Registration = () => {
         data.get("password")
       )
         .then((userCredential) => {
+          toast.success("🦄 Sign Up Succeed.!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
+
           updateProfile(auth.currentUser, {
             displayName: data.get("fullName"),
           })
             .then(() => {
-              setFormData({
-                ...formData,
-                email: "",
-                fullName: "",
-                password: "",
-              });
+              sendEmailVerification(auth.currentUser)
+                .then(() => {
+                  setFormData({
+                    ...formData,
+                    email: "",
+                    fullName: "",
+                    password: "",
+                  });
 
-              navigate("/login");
+                  toast.info("🦄 Varification Mail Sent", {
+                    position: "top-right",
+                    autoClose: 5000,
+                    hideProgressBar: false,
+                    closeOnClick: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    progress: undefined,
+                    theme: "dark",
+                  });
+
+                  setTimeout(() => {
+                    setLoader(false);
+                    navigate("/login");
+                  }, 1000);
+                })
+                .catch((error) => {
+                  console.log(error.code);
+                });
             })
             .catch((error) => {
               console.log(error.code);
             });
-
-          const user = userCredential.user;
-          console.log(user);
         })
         .catch((error) => {
-          const errorCode = error.code;
-          console.log(errorCode);
-          if (errorCode.includes("auth/email-already-in-use")) {
+          if (error.code.includes("auth/email-already-in-use")) {
             setErrorMsg({ ...errorMsg, email: "Email already in use" });
+            setLoader(false);
           }
         });
-
-      // setFormData({
-      //   ...formData,
-      //   email: data.get("email"),
-      //   fullName: data.get("fullName"),
-      //   password: data.get("password"),
-      // });
-      console.log("kaj hoise");
     }
   };
 
   return (
     <ThemeProvider theme={theme}>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
+
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -155,6 +194,7 @@ const Registration = () => {
                 <TextField
                   required
                   fullWidth
+                  disabled={loader ? true : false}
                   label="Email Address"
                   name="email"
                   autoComplete="email"
@@ -187,6 +227,7 @@ const Registration = () => {
                 <TextField
                   required
                   fullWidth
+                  disabled={loader ? true : false}
                   label="Full Name"
                   name="fullName"
                   autoComplete="family-name"
@@ -217,6 +258,7 @@ const Registration = () => {
                 <TextField
                   required
                   fullWidth
+                  disabled={loader ? true : false}
                   name="password"
                   label="Password"
                   type={show ? "text" : "password"}
@@ -258,16 +300,40 @@ const Registration = () => {
                 )}
               </Grid>
             </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 5, mb: 2, padding: "11px 0", borderRadius: "40px" }}
-            >
-              Sign Up
-            </Button>
 
-            <Grid container justifyContent="flex-end">
+            {loader ? (
+              <ColorRing
+                visible={true}
+                height="80"
+                width="80"
+                ariaLabel="blocks-loading"
+                wrapperStyle={{
+                  display: "block",
+                  margin: "0 auto ",
+                  marginTop: "40px",
+                  marginBottom: "16px",
+                  width: "46.49px",
+                  height: "46.49px",
+                }}
+                wrapperClass="blocks-wrapper"
+                colors={["#b8c480", "#B2A3B5", "#F4442E", "#51E5FF", "#429EA6"]}
+              />
+            ) : (
+              <Button
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{ mt: 5, mb: 2, padding: "11px 0", borderRadius: "40px" }}
+              >
+                Sign Up
+              </Button>
+            )}
+
+            <Grid
+              container
+              justifyContent="flex-end"
+              sx={{ visibility: loader ? "hidden" : "visible" }}
+            >
               <Grid item>
                 <Link to="/login" className="auth__link">
                   Already have an account? Sign In
