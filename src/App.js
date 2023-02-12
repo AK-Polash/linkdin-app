@@ -9,19 +9,19 @@ import "./App.css";
 import Registration from "./pages/Registration";
 import Login from "./pages/Login";
 import NoMatch from "./components/NoMatch";
-import Feed from "./pages/Feed";
+import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 
 function App() {
   let router = createBrowserRouter(
     createRoutesFromElements(
       <Route>
-        <Route path="signUp" element={<Registration />} />
+        <Route path="signup" element={<Registration />} />
         <Route path="login" element={<Login />} />
         <Route path="*" element={<NoMatch />} />
         <Route path="/">
+          <Route index element={<Home />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="feed" element={<Feed />} />
         </Route>
       </Route>
     )

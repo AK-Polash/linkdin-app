@@ -48,7 +48,7 @@ const Registration = () => {
 
   useEffect(() => {
     if (data.userData.userInfo) {
-      navigate("/profile");
+      navigate("/");
     }
   }, []);
 
@@ -131,7 +131,7 @@ const Registration = () => {
 
                   setTimeout(() => {
                     setLoader(false);
-                    navigate("/login");
+                    navigate("/");
                   }, 1000);
                 })
                 .catch((error) => {

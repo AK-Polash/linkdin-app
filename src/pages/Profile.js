@@ -1,36 +1,6 @@
-import React, { useEffect } from "react";
-import { getAuth, signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
-import { activeUser } from "../slices/userSlice";
+import React from "react";
 
 const Profile = () => {
-  let auth = getAuth();
-  let dispatch = useDispatch();
-  let data = useSelector((state) => state);
-  let navigate = useNavigate();
-
-  useEffect(() => {
-    if (!data.userData.userInfo) {
-      navigate("/login");
-    }
-  }, []);
-
-  let handleLogOut = () => {
-    signOut(auth)
-      .then(() => {
-        dispatch(activeUser(null));
-        localStorage.removeItem("userInfo");
-
-        setTimeout(() => {
-          navigate("/login");
-        }, 500);
-      })
-      .catch((error) => {
-        console.log(error.code);
-      });
-  };
-
   return (
     <div
       style={{
@@ -41,9 +11,7 @@ const Profile = () => {
         alignItems: "center",
       }}
     >
-      <h1 style={{ color: "red" }}>Profile</h1>
-
-      <button onClick={handleLogOut}>Log Out</button>
+      <h1 style={{ color: "orange" }}>Profile Page</h1>
     </div>
   );
 };

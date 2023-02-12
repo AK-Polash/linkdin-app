@@ -73,7 +73,7 @@ const Login = () => {
 
   useEffect(() => {
     if (data.userData.userInfo) {
-      navigate("/profile");
+      navigate("/");
     }
   }, []);
 
@@ -118,7 +118,7 @@ const Login = () => {
 
           setTimeout(() => {
             setLoader(false);
-            navigate("/profile");
+            navigate("/");
           }, 1000);
         })
         .catch((error) => {
