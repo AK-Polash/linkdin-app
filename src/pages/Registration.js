@@ -166,7 +166,7 @@ const Registration = () => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            height: "95vh",
+            height: "100vh",
           }}
         >
           <div className="logo__holder">
