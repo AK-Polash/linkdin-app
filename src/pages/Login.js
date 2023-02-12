@@ -47,6 +47,7 @@ const Login = () => {
   let navigate = useNavigate();
   let [show, setShow] = useState(false);
   let [loader, setLoader] = useState(false);
+  let [forgotPassLoader, setForgotPassLoader] = useState(false);
 
   // Modal:
   const [open, setOpen] = useState(false);
@@ -144,9 +145,23 @@ const Login = () => {
         forgotPassword: "Enter a valid Email Address",
       });
     } else {
+      setForgotPassLoader(true);
+
       sendPasswordResetEmail(auth, formData.forgotPassword)
         .then(() => {
           setOpen(false);
+          setForgotPassLoader(false);
+
+          toast.info("🦄 Check You Mail to Reset the Password!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          });
         })
         .catch((error) => {
           if (error.code.includes("auth/missing-email")) {
@@ -154,12 +169,14 @@ const Login = () => {
               ...errorMsg,
               forgotPassword: "Missing Email",
             });
+            setForgotPassLoader(false);
           }
           if (error.code.includes("auth/user-not-found")) {
             setErrorMsg({
               ...errorMsg,
               forgotPassword: "User Not Found",
             });
+            setForgotPassLoader(false);
           }
         });
     }
@@ -323,15 +340,16 @@ const Login = () => {
             )}
 
             <Grid container sx={{ visibility: loader ? "hidden" : "visible" }}>
-              <Grid item xs>
-                <span onClick={handleOpen} className="auth__link">
-                  Forgot password?
-                </span>
-              </Grid>
-              <Grid item>
+              <Grid item sm>
                 <Link to="/signup" className="auth__link">
                   Don't have an account? Sign Up
                 </Link>
+              </Grid>
+
+              <Grid item>
+                <span onClick={handleOpen} className="auth__link">
+                  Forgot password?
+                </span>
               </Grid>
             </Grid>
 
@@ -380,21 +398,42 @@ const Login = () => {
                     value={formData.forgotPassword}
                   />
 
-                  <Button
-                    fullWidth
-                    onClick={handleForgotPassword}
-                    type="submit"
-                    variant="contained"
-                    size="small"
-                    sx={{
-                      mt: 2,
-                      padding: "8px 0",
-                      borderRadius: "8px",
-                      width: "100%",
-                    }}
-                  >
-                    Forgot Password
-                  </Button>
+                  {forgotPassLoader ? (
+                    <ColorRing
+                      visible={true}
+                      height="55"
+                      width="55"
+                      ariaLabel="blocks-loading"
+                      wrapperStyle={{
+                        display: "block",
+                        margin: "0 auto ",
+                      }}
+                      wrapperClass="blocks-wrapper"
+                      colors={[
+                        "#b8c480",
+                        "#B2A3B5",
+                        "#F4442E",
+                        "#51E5FF",
+                        "#429EA6",
+                      ]}
+                    />
+                  ) : (
+                    <Button
+                      fullWidth
+                      onClick={handleForgotPassword}
+                      type="submit"
+                      variant="contained"
+                      size="small"
+                      sx={{
+                        mt: 2,
+                        padding: "8px 0",
+                        borderRadius: "8px",
+                        width: "100%",
+                      }}
+                    >
+                      Forgot Password
+                    </Button>
+                  )}
                 </Box>
               </Fade>
             </Modal>
