@@ -73,8 +73,13 @@ const Login = () => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
+    let emailRegex =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
     if (data.get("email") === "") {
       setErrorMsg({ ...errorMsg, email: "Email Required" });
+    } else if (!emailRegex.test(data.get("email"))) {
+      setErrorMsg({ ...errorMsg, email: "Valid Email Required" });
     } else if (data.get("password") === "") {
       setErrorMsg({ ...errorMsg, password: "Enter password" });
     } else {
