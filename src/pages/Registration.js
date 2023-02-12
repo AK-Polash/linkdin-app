@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Avatar,
   Button,
@@ -23,11 +23,13 @@ import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
 import { ColorRing } from "react-loader-spinner";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useSelector } from "react-redux";
 
 const theme = createTheme();
 
 const Registration = () => {
   let auth = getAuth();
+  let data = useSelector((state) => state);
   let navigate = useNavigate();
   let [show, setShow] = useState(false);
   let [loader, setLoader] = useState(false);
@@ -43,6 +45,12 @@ const Registration = () => {
     fullName: "",
     password: "",
   });
+
+  useEffect(() => {
+    if (data.userData.userInfo) {
+      navigate("/profile");
+    }
+  }, []);
 
   const handleSubmit = (event) => {
     event.preventDefault();

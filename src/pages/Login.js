@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import {
   Button,
@@ -21,7 +21,7 @@ import {
   sendPasswordResetEmail,
 } from "firebase/auth";
 import { BsFillEyeFill, BsFillEyeSlashFill } from "react-icons/bs";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { activeUser } from "../slices/userSlice";
 import { ColorRing } from "react-loader-spinner";
 import { ToastContainer, toast } from "react-toastify";
@@ -44,6 +44,7 @@ const style = {
 const Login = () => {
   let auth = getAuth();
   let dispatch = useDispatch();
+  let data = useSelector((state) => state);
   let navigate = useNavigate();
   let [show, setShow] = useState(false);
   let [loader, setLoader] = useState(false);
@@ -70,6 +71,12 @@ const Login = () => {
     forgotPassword: "",
   });
 
+  useEffect(() => {
+    if (data.userData.userInfo) {
+      navigate("/profile");
+    }
+  }, []);
+
   const handleLogin = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -90,6 +97,7 @@ const Login = () => {
       signInWithEmailAndPassword(auth, formData.email, formData.password)
         .then((userCredential) => {
           dispatch(activeUser(userCredential.user));
+          localStorage.setItem("userInfo", JSON.stringify(userCredential.user));
 
           setFormData({
             ...formData,
@@ -204,7 +212,7 @@ const Login = () => {
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            height: "95vh",
+            height: "100vh",
           }}
         >
           <div className="logo__holder">
