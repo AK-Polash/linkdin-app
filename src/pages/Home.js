@@ -3,6 +3,8 @@ import { getAuth, signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { activeUser } from "../slices/userSlice";
+import { Box, Container } from "@mui/material";
+import PostComponent from "../components/PostComponent";
 
 const Home = () => {
   let auth = getAuth();
@@ -16,35 +18,39 @@ const Home = () => {
     }
   }, []);
 
-  // let handleLogOut = () => {
-  //   signOut(auth)
-  //     .then(() => {
-  //       dispatch(activeUser(null));
-  //       localStorage.removeItem("userInfo");
-
-  //       setTimeout(() => {
-  //         navigate("/login");
-  //       }, 500);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error.code);
-  //     });
-  // };
-
   return (
-    <div
-      style={{
+    <Box
+      sx={{
         width: "100%",
-        height: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
+        background: "#F7F9FB",
+        marginTop: "30px",
       }}
     >
-      <h1 style={{ color: "red" }}>Home Page</h1>
-
-      {/* <button onClick={handleLogOut}>Log Out</button> */}
-    </div>
+      <Container maxWidth="xl">
+        <Box
+          sx={{
+            display: "flex",
+            columnGap: "40px",
+          }}
+        >
+          <Box
+            sx={{
+              width: "75%",
+              padding: "30px 25px",
+              background: "#FFF",
+              borderRadius: "8px",
+            }}
+          >
+            <PostComponent />
+          </Box>
+          <Box sx={{ width: "25%", borderRadius: "8px" }}>
+            <div style={{ width: "100%", background: "orange" }}>
+              right side
+            </div>
+          </Box>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 
