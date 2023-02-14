@@ -39,9 +39,9 @@
 =================================================================== */
 
 .post__input {
+  font-size: 14px;
   border: none;
   outline: none;
-  padding: 20px 30px;
   width: 80%;
   color: #666;
   background: transparent;
@@ -92,7 +92,9 @@
 .profile__texts {
   padding: 30px 20px;
 }
-
+.poster__image {
+  width: 100%;
+}
 /* ==================================================================
                             Login page end
 =================================================================== */

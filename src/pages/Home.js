@@ -24,9 +24,8 @@ const Home = () => {
     <Box
       sx={{
         width: "100%",
-        // background: "#F7F9FB",
+        background: "#F7F9FB",
         paddingTop: "30px",
-        background: "gray",
       }}
     >
       <Container maxWidth="xl">
@@ -42,20 +41,34 @@ const Home = () => {
                 xs: "100%",
                 md: "75%",
               },
-              // background: "#FFF",
               borderRadius: "5px",
               display: "flex",
               flexDirection: "column",
-              columnGap: "50px",
-              rowGap: "50px",
+              rowGap: "30px",
             }}
           >
             <PostField />
-            <PostItem imageSource="./assets/post__img.png" />
-            <PostItem />
-            <PostItem />
-            <PostItem />
-            <PostItem />
+            <PostItem
+              posterName="Polash Khan"
+              posterImage="./assets/profile.png"
+              postDate="Today 8pm"
+              post="kire khobor ki"
+              postImage="./assets/post__img.png"
+            />
+            <PostItem
+              posterName="Emon Islam"
+              posterImage="./assets/profile.png"
+              postDate="Today 8pm"
+              post="kire khobor ki"
+              postImage="./assets/post__img.png"
+            />
+            <PostItem
+              posterName="Alamgir Hossain"
+              posterImage="./assets/profile.png"
+              postDate="Today 8pm"
+              post="kire khobor ki"
+              postImage="./assets/post__img.png"
+            />
           </Box>
 
           <Box

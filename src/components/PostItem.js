@@ -8,43 +8,61 @@ import {
   Typography,
   Avatar,
   IconButton,
+  Box,
 } from "@mui/material/";
 import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Image from "./Image";
 
-export default function PostItem({ imageSource }) {
+export default function PostItem({
+  posterName,
+  posterImage,
+  postDate,
+  postImage,
+  post,
+}) {
   return (
     <Card sx={{ maxWidth: "100%" }}>
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
+          posterImage ? (
+            <Box
+              sx={{
+                width: "52px",
+                height: "52px",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+            >
+              <Image className="poster__image" imageSource={posterImage} />
+            </Box>
+          ) : (
+            <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
+              {posterName && posterName.charAt(0)}
+            </Avatar>
+          )
         }
         action={
           <IconButton aria-label="settings">
             <MoreVertIcon />
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
+        title={posterName}
+        subheader={postDate}
       />
       <CardContent sx={{ padding: "0 16px 16px" }}>
         <Typography variant="body2" color="text.secondary">
-          This impressive paella is a perfect party dish and a fun meal to cook
-          together with your guests. Add 1 cup of frozen peas along with the
-          mussels, if you like.
+          {post}
         </Typography>
       </CardContent>
 
-      {imageSource && (
+      {postImage && (
         <CardMedia
-          sx={{ padding: "0 16px" }}
           component="img"
-          height={{ xs: 150, md: 320 }}
-          image={imageSource}
+          height={{ xs: 150, md: 300 }}
+          image={postImage}
           alt="Paella dish"
         />
       )}

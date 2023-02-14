@@ -8,9 +8,11 @@ const PostField = () => {
     <div
       style={{
         width: "100%",
-        background: "crimson",
-        padding: "30px 25px",
+        background: "#fff",
+        padding: "25px 30px",
         borderRadius: "5px",
+        boxShadow:
+          "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
       }}
     >
       <Typography component="h5" fontSize="14px" marginBottom="15px">
@@ -27,7 +29,7 @@ const PostField = () => {
           alignItems: "center",
           columnGap: "20px",
           padding: "10px 0",
-          marginTop: "20px",
+          marginTop: { xs: "0", md: "15px" },
         }}
       >
         <input
@@ -41,7 +43,7 @@ const PostField = () => {
           sx={{
             width: "20%",
             display: "flex",
-            justifyContent: "space-between",
+            justifyContent: "flex-end",
             alignItems: "center",
             columnGap: "10px",
           }}
