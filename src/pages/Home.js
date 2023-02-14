@@ -48,22 +48,9 @@ const Home = () => {
             }}
           >
             <PostField />
+
             <PostItem
               posterName="Polash Khan"
-              posterImage="./assets/profile.png"
-              postDate="Today 8pm"
-              post="kire khobor ki"
-              postImage="./assets/post__img.png"
-            />
-            <PostItem
-              posterName="Emon Islam"
-              posterImage="./assets/profile.png"
-              postDate="Today 8pm"
-              post="kire khobor ki"
-              postImage="./assets/post__img.png"
-            />
-            <PostItem
-              posterName="Alamgir Hossain"
               posterImage="./assets/profile.png"
               postDate="Today 8pm"
               post="kire khobor ki"
