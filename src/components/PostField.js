@@ -39,7 +39,7 @@ const PostField = () => {
 
         <Box
           sx={{
-            width: "10%",
+            width: "20%",
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
