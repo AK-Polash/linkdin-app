@@ -3,9 +3,16 @@ import React from "react";
 import { FiSend } from "react-icons/fi";
 import { IoImageOutline } from "react-icons/io5";
 
-const PostComponent = () => {
+const PostField = () => {
   return (
-    <div style={{ width: "100%" }}>
+    <div
+      style={{
+        width: "100%",
+        background: "crimson",
+        padding: "30px 25px",
+        borderRadius: "5px",
+      }}
+    >
       <Typography component="h5" fontSize="14px" marginBottom="15px">
         New Post
       </Typography>
@@ -51,4 +58,4 @@ const PostComponent = () => {
   );
 };
 
-export default PostComponent;
+export default PostField;

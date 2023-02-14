@@ -75,6 +75,24 @@
   transition: all linear 0.1s;
 }
 
+.cover__image__holder {
+  width: 100%;
+}
+.profile__image__holder {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  position: absolute;
+  margin-bottom: 54px;
+}
+.profile__img {
+  width: 100%;
+}
+.profile__texts {
+  padding: 30px 20px;
+}
+
 /* ==================================================================
                             Login page end
 =================================================================== */
