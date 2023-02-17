@@ -92,7 +92,23 @@ function RootLayout() {
             >
               <Tooltip title="settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                  <Box>
+                    {data.userData.userInfo &&
+                    data.userData.userInfo.photoURL ? (
+                      <Image
+                        imageSource={data.userData.userInfo.photoURL}
+                        alt="profile image"
+                      />
+                    ) : (
+                      data.userData.userInfo &&
+                      !data.userData.userInfo.photoURL && (
+                        <Avatar
+                          alt={data.userData.userInfo.displayName}
+                          src="/static/images/avatar/2.jpg"
+                        />
+                      )
+                    )}
+                  </Box>
                 </IconButton>
               </Tooltip>
 
@@ -100,7 +116,9 @@ function RootLayout() {
                 component="p"
                 sx={{ display: { xs: "none", md: "block" }, color: "#333" }}
               >
-                AK-Polash
+                {data.userData.userInfo
+                  ? data.userData.userInfo.displayName
+                  : ""}
               </Typography>
 
               <Menu

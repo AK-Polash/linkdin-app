@@ -1,23 +1,43 @@
-import React, { useEffect } from "react";
-import { getAuth, signOut } from "firebase/auth";
+import React, { useEffect, useState } from "react";
+import { getAuth } from "firebase/auth";
+import { onValue, getDatabase, ref } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { activeUser } from "../slices/userSlice";
-import { Box, Container } from "@mui/material";
+import { Box, Container, Alert } from "@mui/material";
 import PostField from "../components/PostField";
 import SmallProfile from "../components/SmallProfile";
 import PostItem from "../components/PostItem";
 
 const Home = () => {
+  let db = getDatabase();
   let auth = getAuth();
   let dispatch = useDispatch();
   let data = useSelector((state) => state);
   let navigate = useNavigate();
+  let [postItem, setPostItem] = useState([]);
 
   useEffect(() => {
     if (!data.userData.userInfo) {
       navigate("/login");
     }
+  }, []);
+
+  useEffect(() => {
+    let postRef = ref(db, "posts");
+    onValue(postRef, (snapshot) => {
+      let arr = [];
+
+      snapshot.forEach((item) => {
+        if (
+          data.userData.userInfo &&
+          data.userData.userInfo.uid !== item.val().posterId
+        ) {
+          arr.push({ ...item.val(), id: item.key });
+        }
+      });
+      setPostItem(arr);
+    });
   }, []);
 
   return (
@@ -49,13 +69,22 @@ const Home = () => {
           >
             <PostField />
 
-            <PostItem
-              posterName="Polash Khan"
-              posterImage="./assets/profile.png"
-              postDate="Today 8pm"
-              post="kire khobor ki"
-              postImage="./assets/post__img.png"
-            />
+            {postItem.length > 0 ? (
+              postItem.map((item) => (
+                <PostItem
+                  key={item.id}
+                  posterName={item.posterName}
+                  posterImage="./assets/profile.png"
+                  postDate="Today 8pm"
+                  post={item.postText}
+                  postImage="./assets/post__img.png"
+                />
+              ))
+            ) : (
+              <Alert variant="filled" severity="info">
+                No Post..!
+              </Alert>
+            )}
           </Box>
 
           <Box

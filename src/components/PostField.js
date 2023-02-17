@@ -1,9 +1,37 @@
-import { Box, Divider, Typography, TextareaAutosize } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
+import { Box, Divider, Typography } from "@mui/material";
 import { FiSend } from "react-icons/fi";
 import { IoImageOutline } from "react-icons/io5";
+import { getDatabase, ref, set, push } from "firebase/database";
+import { useSelector } from "react-redux";
 
 const PostField = () => {
+  let db = getDatabase();
+  let data = useSelector((state) => state);
+  let [post, setPost] = useState("");
+
+  let handlePost = () => {
+    if (!post) {
+      console.log("Value den vai");
+    } else {
+      set(push(ref(db, "posts/")), {
+        postText: post,
+        posterName: data.userData.userInfo.displayName,
+        posterId: data.userData.userInfo.uid,
+        // posterPhoto: data.userData.userInfo.photoURL
+        //   ? data.userData.userInfo.photoURL
+        //   : "",
+      })
+        .then(() => {
+          setPost("");
+          console.log("Post kora hoise..!");
+        })
+        .catch((error) => {
+          console.log(error.code);
+        });
+    }
+  };
+
   return (
     <div
       style={{
@@ -37,6 +65,8 @@ const PostField = () => {
           type="text"
           name="post"
           placeholder="What's on your mind?"
+          onChange={(e) => setPost(e.target.value)}
+          value={post}
         />
 
         <Box
@@ -52,7 +82,7 @@ const PostField = () => {
             <IoImageOutline className="post__icon" />
           </div>
           <div className="post__icon__holder">
-            <FiSend className="post__icon" />
+            <FiSend onClick={handlePost} className="post__icon" />
           </div>
         </Box>
       </Box>
