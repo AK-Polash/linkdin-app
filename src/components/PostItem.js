@@ -52,6 +52,7 @@ export default function PostItem({
         title={posterName}
         subheader={postDate}
       />
+      
       <CardContent sx={{ padding: "0 16px 16px" }}>
         <Typography variant="body2" color="text.secondary">
           {post}

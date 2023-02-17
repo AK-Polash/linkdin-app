@@ -74,7 +74,7 @@ const Home = () => {
                 <PostItem
                   key={item.id}
                   posterName={item.posterName}
-                  posterImage="./assets/profile.png"
+                  posterImage={item.posterImage}
                   postDate="Today 8pm"
                   post={item.postText}
                   postImage="./assets/post__img.png"
