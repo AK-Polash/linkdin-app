@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardActions,
@@ -7,13 +7,20 @@ import {
   Button,
   Typography,
   Box,
-  ButtonGroup,
+  ToggleButtonGroup,
+  ToggleButton,
 } from "@mui/material";
 import { IoIosSend } from "react-icons/io";
 import Image from "../components/Image";
 import { Container } from "@mui/system";
 
 const Profile = () => {
+  const [alignment, setAlignment] = useState("profile");
+
+  const handleChange = (event, newAlignment) => {
+    setAlignment(newAlignment);
+  };
+
   return (
     <Box
       sx={{
@@ -92,25 +99,17 @@ const Profile = () => {
             </CardContent>
           </Box>
 
-          {/* <CardActions>
-        <Button size="small">Share</Button>
-        <Button size="small">Learn More</Button>
-      </CardActions> */}
-
-          <ButtonGroup
-            variant={true ? "contained" : "outlined"}
-            aria-label="outlined primary button group"
-            sx={{
-              width: "100%",
-              display: "flex",
-              justifyContent: "center",
-              padding: "30px 0",
-            }}
+          <ToggleButtonGroup
+            color="primary"
+            value={alignment}
+            exclusive
+            onChange={handleChange}
+            aria-label="Platform"
           >
-            <Button>PROFILE</Button>
-            <Button>FRIENDS</Button>
-            <Button>POST</Button>
-          </ButtonGroup>
+            <ToggleButton value="profile">PROFILE</ToggleButton>
+            <ToggleButton value="friends">FRIENDS</ToggleButton>
+            <ToggleButton value="post">POST</ToggleButton>
+          </ToggleButtonGroup>
         </Card>
       </Container>
     </Box>
